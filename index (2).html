@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Controle de Horas</title>
+    <style>
+        :root {
+            --primary: #4285F4;
+            --primary-dark: #3367D6;
+            --secondary: #34A853;
+            --danger: #EA4335;
+            --warning: #FBBC05;
+            --light: #F8F9FA;
+            --dark: #202124;
+            --gray: #5F6368;
+            --border: #DADCE0;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Roboto', Arial, sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+        
+        body {
+            background-color: #f5f5f5;
+            color: var(--dark);
+            line-height: 1.6;
+            padding: 0;
+            margin: 0;
+            padding-bottom: 70px; /* Espaço para o visor fixo */
+        }
+        
+        /* Visor Fixo */
+        .visor-fixo {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background-color: var(--primary);
+            color: white;
+            padding: 15px;
+            text-align: center;
+            box-shadow: 0 -2px 5px rgba(0,0,0,0.2);
+            z-index: 1000;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+        }
+        
+        .visor-item {
+            text-align: center;
+        }
+        
+        .visor-label {
+            font-size: 0.8rem;
+            opacity: 0.9;
+        }
+        
+        .visor-value {
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+        
+        .container {
+            max-width: 100%;
+            padding: 15px;
+        }
+        
+        header {
+            background-color: var(--primary);
+            color: white;
+            padding: 15px;
+            text-align: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        /* Restante do CSS permanece igual */
+        .card {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            padding: 15px;
+            margin-bottom: 15px;
+        }
+        
+        /* ... (mantenha todo o restante do CSS original) ... */
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Controle de Horas</h1>
+        <div class="subtitle">Acompanhe suas 420 horas</div>
+    </header>
+    
+    <div class="container">
+        <!-- Todo o conteúdo original permanece aqui -->
+        <!-- ... (mantenha todo o HTML original) ... -->
+    </div>
+    
+    <!-- Visor Fixo -->
+    <div class="visor-fixo">
+        <div class="visor-item">
+            <div class="visor-label">Horas Trabalhadas</div>
+            <div class="visor-value" id="visorHorasTrabalhadas">0.00h</div>
+        </div>
+        <div class="visor-item">
+            <div class="visor-label">Horas Restantes</div>
+            <div class="visor-value" id="visorHorasRestantes">420.00h</div>
+        </div>
+        <div class="visor-item">
+            <div class="visor-label">Progresso</div>
+            <div class="visor-value" id="visorProgresso">0%</div>
+        </div>
+    </div>
+    
+    <!-- Modal de Edição -->
+    <div id="editModal" class="modal hidden">
+        <!-- ... (mantenha o modal original) ... -->
+    </div>
+
+    <script>
+        // Constantes
+        const META_HORAS = 420;
+        
+        // Atualize a função updateProgresso para incluir o visor
+        function updateProgresso() {
+            const registros = JSON.parse(localStorage.getItem('registrosHoras')) || [];
+            const totalHoras = registros.reduce((sum, reg) => sum + reg.horas, 0);
+            const progresso = (totalHoras / META_HORAS) * 100;
+            const restante = META_HORAS - totalHoras;
+            
+            // Atualiza os elementos principais
+            progressBar.style.width = `${progresso}%`;
+            progressBar.textContent = `${progresso.toFixed(1)}%`;
+            horasTrabalhadasElement.textContent = `${totalHoras.toFixed(2)}h`;
+            horasRestantesElement.textContent = `${restante.toFixed(2)}h`;
+            
+            // Atualiza o visor fixo
+            document.getElementById('visorHorasTrabalhadas').textContent = `${totalHoras.toFixed(2)}h`;
+            document.getElementById('visorHorasRestantes').textContent = `${restante.toFixed(2)}h`;
+            document.getElementById('visorProgresso').textContent = `${progresso.toFixed(1)}%`;
+            
+            // Altera a cor conforme o progresso
+            if (restante <= 0) {
+                horasRestantesElement.classList.add('completed');
+                horasRestantesElement.classList.remove('warning');
+                document.getElementById('visorHorasRestantes').style.color = 'var(--secondary)';
+            } else {
+                horasRestantesElement.classList.add('warning');
+                horasRestantesElement.classList.remove('completed');
+                document.getElementById('visorHorasRestantes').style.color = 'white';
+            }
+        }
+        
+        // ... (mantenha todo o restante do JavaScript original) ...
+    </script>
+</body>
+</html>
